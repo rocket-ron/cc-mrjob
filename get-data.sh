@@ -14,5 +14,11 @@ do
   mkdir -p `dirname $f`
   echo "Downloading `basename $f` ..."
   echo "---"
-  wget https://aws-publicdatasets.s3.amazonaws.com/$f -O $f
+  if [ "$(uname)" == "Darwin" ]; then
+    cd `dirname $f`
+    curl https://aws-publicdatasets.s3.amazonaws.com/$f -O
+    cd -
+  elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+    wget https://aws-publicdatasets.s3.amazonaws.com/$f -O $f
+  fi
 done
